@@ -4,8 +4,8 @@ import java.util.Date;
 public class Person {
     private int ID;
     private String name;
-    private Date birthDate;
-    private int gender; //0 is female, 1 is male
+    private String birthDate;
+    private String gender; //0 is female, 1 is male
     private Relation parents;
     private ArrayList<Relation> relations;
 
@@ -21,19 +21,19 @@ public class Person {
         this.name = name;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
