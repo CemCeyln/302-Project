@@ -86,7 +86,9 @@
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <text value=""/>
+                </properties>
               </component>
               <component id="f0dad" class="javax.swing.JLabel" binding="namelabel">
                 <constraints>
@@ -134,7 +136,9 @@
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <text value=""/>
+                </properties>
               </component>
               <component id="2bd59" class="javax.swing.JTextField" binding="entersurname">
                 <constraints>

@@ -1,6 +1,7 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.sun.xml.internal.bind.v2.model.core.ID;
+
+import javax.xml.transform.Result;
+import java.sql.*;
 
 public class Database {
     public static void main(String[] args) throws ClassNotFoundException {
@@ -11,6 +12,21 @@ public class Database {
             conn = DriverManager.getConnection(url);
             System.out.println("Database connected.");
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String sql = "Select * from Person";
+        try {
+            assert conn != null;
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next())
+            {
+                System.out.println(rs.getInt("personID") + " " + rs.getString("name") + " " + rs.getString("birthdate") + " " + rs.getInt("gender"));
+            }
+        }
+        catch (Exception e)
+        {
             System.out.println(e.getMessage());
         }
     }
