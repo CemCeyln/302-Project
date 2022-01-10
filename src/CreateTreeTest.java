@@ -42,6 +42,38 @@ public class CreateTreeTest {
             System.out.println(e.getMessage());
         }
 
+        String findRelationSql = "Select * from Relation where personID-1 == 1 or personID-2 == 1";
+        try{
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(findRelationSql);
+            while (rs.next())
+            {
+                int personID = rs.getInt("personID-1");
+                if(personID == 1)
+                {
+                    personID = rs.getInt("personID-2");
+                }
+                String getPersonSql = "Select * from Person where personID ==" + personID;
+                Statement st2 = conn.createStatement();
+                ResultSet rs2 = st2.executeQuery(getPersonSql);
+                Person spouse = new Person();
+                spouse.setID(rs2.getInt("personID"));
+                if(rs2.getInt("gender") == 1)
+                {
+                    spouse.setGender("Male");
+                }
+                else {
+                    spouse.setGender("Female");
+                }
+                spouse.setBirthDate(rs2.getString("birthdate"));
+                spouse.setName(rs2.getString("name"));
+                Relation newRelation = new Relation();
+                newRelation.setSpouse1(rootPerson);
+                newRelation.setSpouse2(spouse);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
      /*  JFrame frame = new JFrame();
         frame.setSize(1000, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
