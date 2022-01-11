@@ -10,6 +10,8 @@ public class InputGetDeneme {
     public static int personID = 1;
     public static HashMap<Integer, DefaultMutableTreeNode> familyTree = new HashMap<Integer, DefaultMutableTreeNode>();
     public static ArrayList<Relation> Relations = new ArrayList<Relation>();
+    public static ArrayList<Person> peopleInTree = new ArrayList<Person>();
+    public static ArrayList<JTree> Trees = new ArrayList<JTree>();
     public static JTree tree;
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -129,22 +131,48 @@ public class InputGetDeneme {
                             tree = new JTree(rootNode);
                             familyTree.put(personID,rootNode);
                             leftPanel.add(tree);
+                            peopleInTree.add(newPerson);
+                            Trees.add(tree);
                         }
                         else
                         {
+                            Person otherParent = new Person();
+                            for(Relation var: Relations)
+                            {
+                                if(var.getSpouse1().getID() == parentID)
+                                {
+                                    otherParent = var.getSpouse2();
+                                    break;
+                                }
+                                else if (var.getSpouse2().getID() == parentID)
+                                {
+                                    otherParent = var.getSpouse1();
+                                    break;
+                                }
+                            }
+                            System.out.println(otherParent.getID());
+
+
                             DefaultMutableTreeNode parentNode = familyTree.get(parentID);
+                            DefaultMutableTreeNode otherParentNode = familyTree.get(otherParent.getID());
                             newPerson.setID(++personID);
                             newPerson.setName(name);
                             newPerson.setGender(gender);
                             newPerson.setBirthDate(birthdate);
                             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                            DefaultMutableTreeNode newNode2 = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
                             parentNode.add(newNode);
-                            int a = parentNode.getChildCount();
-                            System.out.println(a);
-                            tree.updateUI();
+                            otherParentNode.add(newNode2);
+                            for(JTree var: Trees)
+                            {
+                                var.updateUI();
+                            }
                             familyTree.put(personID,newNode);
+                            familyTree.put(personID,newNode2);
+                            peopleInTree.add(newPerson);
                         }
                         newFrame.pack();
+                       // newFrame.setSize(500,100);
                     }
                 });
                 //Add spouse button
@@ -166,17 +194,34 @@ public class InputGetDeneme {
                             tree = new JTree(rootNode);
                             familyTree.put(personID,rootNode);
                             leftPanel.add(tree);
+                            peopleInTree.add(newPerson);
                         }
                         else
                         {
+                            Relation newRelation = new Relation();
+                            Person spousePerson = new Person();
+                            for(Person var : peopleInTree) //Ağaçtan spouse'u arıyorum
+                            {
+                                if(var.getID() == spouseID)
+                                {
+                                    spousePerson = var;
+                                }
+                            }
                             newPerson.setID(++personID);
                             newPerson.setName(name);
                             newPerson.setGender(gender);
                             newPerson.setBirthDate(birthdate);
+                            //Adding to relation
+                            newRelation.setSpouse2(newPerson);
+                            newRelation.setSpouse1(spousePerson);
+
+                            Relations.add(newRelation);
                             DefaultMutableTreeNode newTreeRootNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
                             familyTree.put(personID, newTreeRootNode);
                             JTree newTree = new JTree(newTreeRootNode);;
                             leftPanel.add(newTree);
+                            peopleInTree.add(newPerson);
+                            Trees.add(newTree);
                         }
                         newFrame.pack();
                     }
