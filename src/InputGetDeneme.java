@@ -19,7 +19,7 @@ public class InputGetDeneme {
     public static ArrayList<Node> nodes = new ArrayList<Node>();
     public static ArrayList<Node> nodesTemp = new ArrayList<Node>();
     public static JTree tree;
-    //public static HashMap<Integer, DefaultMutableTreeNode> familyTree = new HashMap<Integer, DefaultMutableTreeNode>();
+    public static HashMap<String, DefaultMutableTreeNode> listedRelations = new HashMap<String, DefaultMutableTreeNode>();
    /* public static void methodWrite() throws IOException {
         String createPath = "C:";
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(createPath));
@@ -62,6 +62,7 @@ public class InputGetDeneme {
                 newFrame.setSize(1200,600);
                 JPanel leftPanel = new JPanel();
                 JPanel rightPanel = new JPanel();
+
                 //Sol üst taraf
                 JLabel labelExp = new JLabel("Lütfen bu kısmı ağaca yeni bir çocuk eklerken kullanın.");
                 labelExp.setPreferredSize(new Dimension(15,15));
@@ -110,6 +111,16 @@ public class InputGetDeneme {
                 JButton editBtn = new JButton("Güncelle");
                 JButton removeBtn = new JButton("Kaldır");
 
+                //Sağ alt taraf
+             //   JLabel labelExp8 = new JLabel("Akrabalık ilişkilerini görüntüle");
+              //  JLabel labelExp9 = new JLabel("Kişinin ID'sini girin.");
+                //labelExp8.setPreferredSize(new Dimension(15,15));
+                //labelExp9.setPreferredSize(new Dimension(15,15));
+                JLabel labelsearchID = new JLabel("İlişkileri görmek için bir ID girin");
+                JTextField getSearchID = new JTextField(15);
+                getSearchID.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+                JButton searchbtn = new JButton("İlişkileri listele");
+
                 rightPanel.setLayout(new GridLayout(2,2));
                 JPanel topLeft = new JPanel();
                 topLeft.setLayout(new BoxLayout(topLeft, BoxLayout.PAGE_AXIS));
@@ -120,6 +131,8 @@ public class InputGetDeneme {
                 JPanel botRight = new JPanel();
                 botLeft.setBorder(BorderFactory.createLineBorder(Color.black));
                 botRight.setBorder(BorderFactory.createLineBorder(Color.black));
+                botRight.setLayout(new BoxLayout(botRight,BoxLayout.PAGE_AXIS));
+
                 //Sol üst panele ekleme
                 topLeft.setBorder(BorderFactory.createLineBorder(Color.black));
                 topLeft.add(labelExp);
@@ -162,10 +175,20 @@ public class InputGetDeneme {
                 botLeft.add(getEditedGender);
                 botLeft.add(editBtn);
                 botLeft.add(removeBtn);
+
+                //Sağ alt panele ekleme
+               // botRight.add(labelExp8);
+               // botRight.add(labelExp9);
+
+                botRight.add(labelsearchID);
+                botRight.add(getSearchID);
+                botRight.add(searchbtn);
+
                 rightPanel.add(topLeft);
                 rightPanel.add(topRight);
                 rightPanel.add(botLeft);
                 rightPanel.add(botRight);
+
 
                 JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(leftPanel),new JScrollPane(rightPanel));
                 mainSplitPane.setResizeWeight(0.6);
@@ -381,7 +404,14 @@ public class InputGetDeneme {
                             else if(var.getNodeID() == removedPersonSpouse.getID())
                             {
                                 var.getNode().removeAllChildren();
-                                var.getNode().removeFromParent();
+                                if(var.getNode().isRoot())
+                                {
+                                    var.getNode().setUserObject(null);
+                                }
+                                else
+                                {
+                                    var.getNode().removeFromParent();
+                                }
                                 //eğer parent root ise nasıl kaldıracağını kontrol et
 
                             }
@@ -416,7 +446,6 @@ public class InputGetDeneme {
                             if(var.getNodeID() == editedPerson.getID())
                             {
                                 var.getNode().setUserObject(editedPerson.getName() + " - ID:" + editedPerson.getID() + " - " + editedPerson.getBirthDate() + " - " + editedPerson.getGender());
-                                System.out.println(var.getNode().getUserObject());
                             }
                         }
                         for(JTree var: Trees)
@@ -426,6 +455,33 @@ public class InputGetDeneme {
                     }
                 });
 
+                searchbtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int searchedPersonID = Integer.parseInt(getSearchID.getText());
+                        for(Node var : nodes)
+                        {
+                            if(var.getNodeID() == searchedPersonID)
+                            {
+                                if(!(var.getNode().isRoot()))
+                                {
+                                    //var.getNode().getParent().
+
+                                }
+                                else if(!(var.getNode().isLeaf()))
+                                {
+                                    var.getNode().children();
+
+                                }
+                                else if(var.getNode().getSiblingCount() != 0)
+                                {
+                                    var.getNode().getNextSibling().getUserObjectPath();
+                                    var.getNode().getPreviousSibling().getUserObjectPath();
+                                }
+                            }
+                        }
+                    }
+                });
                 newFrame.add(mainSplitPane);
                 newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 newFrame.setVisible(true);
