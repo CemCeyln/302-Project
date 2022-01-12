@@ -310,7 +310,7 @@ public class InputGetDeneme {
                             newnode.setNode(newTreeRootNode);
                             nodes.add(newnode);
                         }
-                        Trees.get(Trees.size() - 1).addTreeSelectionListener(new TreeSelectionListener() {
+                      /*  Trees.get(Trees.size() - 1).addTreeSelectionListener(new TreeSelectionListener() {
                             @Override
                             public void valueChanged(TreeSelectionEvent e) {
                                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)Trees.get(Trees.size()-1).getLastSelectedPathComponent();
@@ -321,7 +321,7 @@ public class InputGetDeneme {
                                 getEditedbirthDate.setText(splitName[2]);
                                 getEditedGender.setText(splitName[3]);
                             }
-                        });
+                        }); */
                     /*    tree.addTreeSelectionListener(new TreeSelectionListener() {
                             @Override
                             public void valueChanged(TreeSelectionEvent e) {
@@ -340,12 +340,14 @@ public class InputGetDeneme {
                         newFrame.setSize(size);
                     }
                 });
+                //Remove butonu
                 removeBtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int removedPersonID = Integer.parseInt(getEditedID.getText());
                         Person removedPerson = null;
                         Person removedPersonSpouse = null;
+
 
                         for(Person var : peopleInTree) //Silinecek person'ı arıyorum
                         {
@@ -373,26 +375,15 @@ public class InputGetDeneme {
                         {
                             if(var.getNodeID() == removedPerson.getID())
                             {
-                                System.out.println("A");
                                 var.getNode().removeAllChildren();
                                 var.getNode().removeFromParent();
-                                //var.getNode().removeAllChildren();
-
-                                /*Node removedNode = new Node();
-                                removedNode.setNode(var.getNode());
-                                removedNode.setNodeID(removedPersonID);
-                                nodesTemp.add(removedNode); */
                             }
                             else if(var.getNodeID() == removedPersonSpouse.getID())
                             {
-                                System.out.println("b");
                                 var.getNode().removeAllChildren();
                                 var.getNode().removeFromParent();
-                               /* Node removedSpouseNode = new Node();
-                                removedSpouseNode.setNode(var.getNode());
-                                removedSpouseNode.setNodeID(removedPersonID);
-                                removedSpouseNode.getNode().removeAllChildren();
-                                nodesTemp.add(removedSpouseNode); */
+                                //eğer parent root ise nasıl kaldıracağını kontrol et
+
                             }
                         }
                         for(JTree var: Trees)
@@ -401,6 +392,40 @@ public class InputGetDeneme {
                         }
                     }
                 });
+                editBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int editedPersonID = Integer.parseInt(getEditedID.getText());
+                        String editedPersonName = getEditedName.getText();
+                        String editedPersonBirthdate = getEditedbirthDate.getText();
+                        String editedPersonGender = getEditedGender.getText();
+
+                        Person editedPerson = null;
+                        for(Person var : peopleInTree) //Editlenecek person'ı arıyorum
+                        {
+                            if(var.getID() == editedPersonID)
+                            {
+                                editedPerson = var;
+                            }
+                        }
+                        editedPerson.setName(editedPersonName);
+                        editedPerson.setBirthDate(editedPersonBirthdate);
+                        editedPerson.setGender(editedPersonGender);
+                        for(Node var : nodes)
+                        {
+                            if(var.getNodeID() == editedPerson.getID())
+                            {
+                                var.getNode().setUserObject(editedPerson.getName() + " - ID:" + editedPerson.getID() + " - " + editedPerson.getBirthDate() + " - " + editedPerson.getGender());
+                                System.out.println(var.getNode().getUserObject());
+                            }
+                        }
+                        for(JTree var: Trees)
+                        {
+                            var.updateUI();
+                        }
+                    }
+                });
+
                 newFrame.add(mainSplitPane);
                 newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 newFrame.setVisible(true);
