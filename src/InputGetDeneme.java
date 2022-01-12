@@ -12,10 +12,12 @@ public class InputGetDeneme {
     public static ArrayList<Relation> Relations = new ArrayList<Relation>();
     public static ArrayList<Person> peopleInTree = new ArrayList<Person>();
     public static ArrayList<JTree> Trees = new ArrayList<JTree>();
+    public static ArrayList<Node> nodes = new ArrayList<Node>();
+    public static ArrayList<Node> nodesTemp = new ArrayList<Node>();
     public static JTree tree;
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setSize(1000,500);
+        frame.setSize(1200,600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLayout(new FlowLayout());
@@ -38,7 +40,7 @@ public class InputGetDeneme {
 
                 JFrame newFrame = new JFrame();
                 newFrame.pack();
-                newFrame.setSize(1000,500);
+                newFrame.setSize(1200,600);
                 JPanel leftPanel = new JPanel();
                 JPanel rightPanel = new JPanel();
                 //Sol üst taraf
@@ -111,7 +113,7 @@ public class InputGetDeneme {
                 rightPanel.add(botRight);
 
                 JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(leftPanel),new JScrollPane(rightPanel));
-                mainSplitPane.setResizeWeight(0.4);
+                mainSplitPane.setResizeWeight(0.6);
                 //Add child button
                 btn.addActionListener(new ActionListener() {
                     @Override
@@ -130,9 +132,14 @@ public class InputGetDeneme {
                             DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
                             tree = new JTree(rootNode);
                             familyTree.put(personID,rootNode);
+                            Node newnode = new Node();
+                            newnode.setNodeID(personID);
+                            newnode.setNode(rootNode);
+                            nodes.add(newnode);
                             leftPanel.add(tree);
                             peopleInTree.add(newPerson);
                             Trees.add(tree);
+
                         }
                         else
                         {
@@ -153,26 +160,59 @@ public class InputGetDeneme {
                             System.out.println(otherParent.getID());
 
 
-                            DefaultMutableTreeNode parentNode = familyTree.get(parentID);
-                            DefaultMutableTreeNode otherParentNode = familyTree.get(otherParent.getID());
+                            //DefaultMutableTreeNode parentNode = familyTree.get(parentID);
+                            //DefaultMutableTreeNode otherParentNode = familyTree.get(otherParent.getID());
+
                             newPerson.setID(++personID);
                             newPerson.setName(name);
                             newPerson.setGender(gender);
                             newPerson.setBirthDate(birthdate);
-                            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
-                            DefaultMutableTreeNode newNode2 = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
-                            parentNode.add(newNode);
-                            otherParentNode.add(newNode2);
+                            //DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                            //DefaultMutableTreeNode newNode2 = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                           for(Node var : nodes)
+                           {
+                               if(var.getNodeID() == parentID)
+                               {
+                                   DefaultMutableTreeNode parentNode = var.getNode();
+                                   DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                                   parentNode.add(newNode);
+                                   Node newnode = new Node();
+                                   newnode.setNodeID(newPerson.getID());
+                                   newnode.setNode(newNode);
+                                   nodesTemp.add(newnode);
+                               }
+                               else if(var.getNodeID() == otherParent.getID())
+                               {
+                                   DefaultMutableTreeNode otherParentNode = var.getNode();
+                                   DefaultMutableTreeNode newNode2 = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                                   otherParentNode.add(newNode2);
+                                   Node newnode = new Node();
+                                   newnode.setNodeID(newPerson.getID());
+                                   newnode.setNode(newNode2);
+                                   nodesTemp.add(newnode);
+                               }
+                           }
+                            nodes.addAll(nodesTemp);
+                            nodesTemp.clear();
+                            //parentNode.add(newNode);
+                           // otherParentNode.add(newNode2);
                             for(JTree var: Trees)
                             {
                                 var.updateUI();
                             }
-                            familyTree.put(personID,newNode);
-                            familyTree.put(personID,newNode2);
+                            //familyTree.put(personID,newNode);
+                           // familyTree.put(personID,newNode2);
+                            //Node newnode2 = new Node();
+                            //newnode2.setNodeID(personID);
+                            //newnode2.setNode(newNode2);
+                            //nodes.add(newnode2);
+
                             peopleInTree.add(newPerson);
+
                         }
+                        Dimension size = newFrame.getSize();
                         newFrame.pack();
-                       // newFrame.setSize(500,100);
+                        newFrame.setSize(size);
                     }
                 });
                 //Add spouse button
@@ -195,6 +235,10 @@ public class InputGetDeneme {
                             familyTree.put(personID,rootNode);
                             leftPanel.add(tree);
                             peopleInTree.add(newPerson);
+                            Node newnode = new Node();
+                            newnode.setNodeID(personID);
+                            newnode.setNode(rootNode);
+                            nodes.add(newnode);
                         }
                         else
                         {
@@ -222,8 +266,14 @@ public class InputGetDeneme {
                             leftPanel.add(newTree);
                             peopleInTree.add(newPerson);
                             Trees.add(newTree);
+                            Node newnode = new Node();
+                            newnode.setNodeID(personID);
+                            newnode.setNode(newTreeRootNode);
+                            nodes.add(newnode);
                         }
+                        Dimension size = newFrame.getSize();
                         newFrame.pack();
+                        newFrame.setSize(size);
                     }
                 });
                 newFrame.add(mainSplitPane);
