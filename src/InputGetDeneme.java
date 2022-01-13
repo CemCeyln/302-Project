@@ -3,6 +3,7 @@ import com.sun.source.tree.Tree;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.plaf.multi.MultiLabelUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -122,6 +123,8 @@ public class InputGetDeneme {
                 JTextField getSearchID = new JTextField(15);
                 getSearchID.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
                 JButton searchbtn = new JButton("İlişkileri listele");
+                JLabel relationLabel = new JLabel();
+
 
                 rightPanel.setLayout(new GridLayout(2,2));
                 JPanel topLeft = new JPanel();
@@ -179,12 +182,10 @@ public class InputGetDeneme {
                 botLeft.add(removeBtn);
 
                 //Sağ alt panele ekleme
-               // botRight.add(labelExp8);
-               // botRight.add(labelExp9);
-
                 botRight.add(labelsearchID);
                 botRight.add(getSearchID);
                 botRight.add(searchbtn);
+                botRight.add(relationLabel);
 
                 rightPanel.add(topLeft);
                 rightPanel.add(topRight);
@@ -415,7 +416,6 @@ public class InputGetDeneme {
                                     var.getNode().removeFromParent();
                                 }
                                 //eğer parent root ise nasıl kaldıracağını kontrol et
-
                             }
                         }
                         for(JTree var: Trees)
@@ -474,7 +474,6 @@ public class InputGetDeneme {
                                     String[] parentInfoArray = (parentNode.getUserObject()).toString().split("-");
                                     if(parentInfoArray[3].toLowerCase().equals(" erkek"))
                                     {
-
                                         parentInfo = "Baba: " + parentInfoArray[0];
                                     }
                                     else if(parentInfoArray[3].toLowerCase().equals(" kadın"))
@@ -485,7 +484,6 @@ public class InputGetDeneme {
                                     {
                                         relationList.add(parentInfo);
                                     }
-                                    System.out.println(parentInfo);
                                     int siblingNumber = parentNode.getChildCount();
                                     if(siblingNumber > 1)
                                     {
@@ -507,7 +505,6 @@ public class InputGetDeneme {
                                                 if(!(relationList.contains(siblingInfo)))
                                                 {
                                                     relationList.add(siblingInfo);
-                                                    System.out.println(siblingInfo);
                                                 }
                                             }
                                         }
@@ -517,7 +514,6 @@ public class InputGetDeneme {
                                         String childInfo = null;
                                         DefaultMutableTreeNode grandParentNode = (DefaultMutableTreeNode) parentNode.getParent();
                                         String[] grandParentInfoArray = grandParentNode.getUserObject().toString().split("-");
-                                        System.out.println("GrandparentArray" + Arrays.toString(grandParentInfoArray));
                                         if(grandParentInfoArray[3].toLowerCase().equals(" erkek"))
                                         {
                                             grandParentInfo = "Dede: " + grandParentInfoArray[0];
@@ -560,17 +556,14 @@ public class InputGetDeneme {
                                                 if(!(relationList.contains(childInfo)))
                                                 {
                                                     relationList.add(childInfo);
-                                                    System.out.println(childInfo);
                                                 }
 
                                             }
                                         }
-                                        System.out.println(grandParentInfo);
                                     }
                                 }
                                 if(var.getNode().getChildCount() != 0)
                                 {
-                                    System.out.println("Çocuk kısmı");
                                     String childInfo = null;
                                     DefaultMutableTreeNode Node = (DefaultMutableTreeNode) var.getNode();
                                     int childCount = Node.getChildCount();
@@ -583,22 +576,34 @@ public class InputGetDeneme {
                                         {
                                             relationList.add(childInfo);
                                         }
-                                        System.out.println(childInfo);
                                     }
                                 }
-                            /*   if(var.getNode().getSiblingCount() != 0)
+                                for(Relation rel: Relations)
                                 {
-                                    int siblingNumber = var.getNode().getSiblingCount();
-                                    for(int j=0; j < siblingNumber; j++)
+                                    if(rel.getSpouse1().getID() == searchedPersonID) //ID'yi böl
                                     {
-                                        if(!(var.getNode().getNextSibling().getUserObject().toString().equals(var.getNode().getUserObject().toString())))
-                                        {
-
-                                        }
+                                        String infoSpouse = "Eş: " + rel.getSpouse2().getName();
+                                        relationList.add(infoSpouse);
+                                        break;
                                     }
-                                } */
+                                    else if (rel.getSpouse2().getID() == searchedPersonID)
+                                    {
+                                        String infoSpouse = "Eş: " + rel.getSpouse1().getName();
+                                        relationList.add(infoSpouse);
+                                        break;
+                                    }
+                                }
                             }
                         }
+                        String relations = "<html>";
+                        for(int m = 0; m < relationList.size(); m++)
+                        {
+
+                            relations = relations + "<br/>" + relationList.get(m);
+                        }
+                        relations = relations + "</html>";
+                        relationLabel.setText(relations);
+                        relationList.clear();
                     }
                 });
                 newFrame.add(mainSplitPane);
