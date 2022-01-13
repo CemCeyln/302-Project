@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class InputGetDeneme {
@@ -208,7 +209,7 @@ public class InputGetDeneme {
                             newPerson.setName(name);
                             newPerson.setGender(gender);
                             newPerson.setBirthDate(birthdate);
-                            DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newPerson.getName() + " - " + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                            DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(newPerson.getName() + " - ID:" + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
                             tree = new JTree(rootNode);
                             //familyTree.put(personID,rootNode);
                             Node newnode = new Node();
@@ -245,7 +246,7 @@ public class InputGetDeneme {
                                if(var.getNodeID() == parentID)
                                {
                                    DefaultMutableTreeNode parentNode = var.getNode();
-                                   DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - ID" + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
+                                   DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newPerson.getName() + " - ID:" + newPerson.getID() + " - " + newPerson.getBirthDate() + " - " + newPerson.getGender());
                                    parentNode.add(newNode);
                                    Node newnode = new Node();
                                    newnode.setNodeID(newPerson.getID());
@@ -486,37 +487,89 @@ public class InputGetDeneme {
                                     System.out.println(parentInfo);
                                     if(!(parentNode.isRoot()))
                                     {
-                                        DefaultMutableTreeNode grandParentNode = (DefaultMutableTreeNode)  parentNode.getParent();
+                                        String childInfo = null;
+                                        DefaultMutableTreeNode grandParentNode = (DefaultMutableTreeNode) parentNode.getParent();
                                         String[] grandParentInfoArray = grandParentNode.getUserObject().toString().split("-");
+                                        System.out.println("GrandparentArray" + Arrays.toString(grandParentInfoArray));
                                         if(grandParentInfoArray[3].toLowerCase().equals(" erkek"))
                                         {
-                                            grandParentInfo = "Dede: " + parentInfoArray[0];
+                                            grandParentInfo = "Dede: " + grandParentInfoArray[0];
                                         }
                                         else if(grandParentInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" erkek"))
                                         {
-                                            grandParentInfo = "Babaanne: " + parentInfoArray[0];
+                                            grandParentInfo = "Babaanne: " + grandParentInfoArray[0];
                                         }
                                         else if(grandParentInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" kadın"))
                                         {
-                                            grandParentInfo = "Anneanne: " + parentInfoArray[0];
+                                            grandParentInfo = "Anneanne: " + grandParentInfoArray[0];
                                         }
                                         if(!(relationList.contains(grandParentInfo)))
                                         {
                                             relationList.add(grandParentInfo);
                                         }
+                                        int childNumber = grandParentNode.getChildCount();
+                                        for(int k=0; k < childNumber; k++)
+                                        {
+                                            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) grandParentNode.getChildAt(k);
+                                            String[] childInfoArray = childNode.getUserObject().toString().split("-");
+                                            if(!(childInfoArray[0].equals(parentInfoArray[0])))
+                                            {
+                                                if((childInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" erkek")))
+                                                {
+                                                    childInfo = "Hala: " + childInfoArray[0];
+                                                }
+                                                else if(childInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" kadın"))
+                                                {
+                                                    childInfo = "Teyze: " + childInfoArray[0];
+                                                }
+                                                else if(childInfoArray[3].toLowerCase().equals(" erkek") && parentInfoArray[3].toLowerCase().equals(" erkek"))
+                                                {
+                                                    childInfo = "Amca: " + childInfoArray[0];
+                                                }
+                                                else if(childInfoArray[3].toLowerCase().equals(" erkek") && parentInfoArray[3].toLowerCase().equals(" kadın"))
+                                                {
+                                                    childInfo = "Dayı: " + childInfoArray[0];
+                                                }
+                                                if(!(relationList.contains(childInfo)))
+                                                {
+                                                    relationList.add(childInfo);
+                                                    System.out.println(childInfo);
+                                                }
+
+                                            }
+                                        }
                                         System.out.println(grandParentInfo);
                                     }
                                 }
-                                else if(!(var.getNode().isLeaf()))
+                                if(var.getNode().getChildCount() != 0)
                                 {
-                                    var.getNode().children();
+                                    System.out.println("Çocuk kısmı");
+                                    String childInfo = null;
+                                    DefaultMutableTreeNode Node = (DefaultMutableTreeNode) var.getNode();
+                                    int childCount = Node.getChildCount();
+                                    for(int i=0; i < childCount; i++)
+                                    {
+                                        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) Node.getChildAt(i);
+                                        String[] childInfoArray = childNode.getUserObject().toString().split("-");
+                                        childInfo = "Çocuk: " + childInfoArray[0];
+                                        if(!(relationList.contains(childInfo)))
+                                        {
+                                            relationList.add(childInfo);
+                                        }
+                                        System.out.println(childInfo);
+                                    }
+                                }
+                            /*   if(var.getNode().getSiblingCount() != 0)
+                                {
+                                    int siblingNumber = var.getNode().getSiblingCount();
+                                    for(int j=0; j < siblingNumber; j++)
+                                    {
+                                        if(!(var.getNode().getNextSibling().getUserObject().toString().equals(var.getNode().getUserObject().toString())))
+                                        {
 
-                                }
-                                else if(var.getNode().getSiblingCount() != 0)
-                                {
-                                    var.getNode().getNextSibling().getUserObjectPath();
-                                    var.getNode().getPreviousSibling().getUserObjectPath();
-                                }
+                                        }
+                                    }
+                                } */
                             }
                         }
                     }
