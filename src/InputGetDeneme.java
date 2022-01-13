@@ -456,7 +456,7 @@ public class InputGetDeneme {
                         }
                     }
                 });
-
+                //İlişki listeleme
                 searchbtn.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -465,6 +465,7 @@ public class InputGetDeneme {
                         {
                             if(var.getNodeID() == searchedPersonID)
                             {
+                                String[] nodeInfoArray = var.getNode().getUserObject().toString().split("-");
                                 if(!(var.getNode().isRoot()))
                                 {
                                     String parentInfo = null;
@@ -485,6 +486,32 @@ public class InputGetDeneme {
                                         relationList.add(parentInfo);
                                     }
                                     System.out.println(parentInfo);
+                                    int siblingNumber = parentNode.getChildCount();
+                                    if(siblingNumber > 1)
+                                    {
+                                        for(int a =0; a < siblingNumber; a++)
+                                        {
+                                            String siblingInfo = null;
+                                            DefaultMutableTreeNode siblingNode = (DefaultMutableTreeNode) parentNode.getChildAt(a);
+                                            String[] siblingInfoArray = siblingNode.getUserObject().toString().split("-");
+                                            if(!(siblingInfoArray[0].equals(nodeInfoArray[0])))
+                                            {
+                                                if(siblingInfoArray[3].toLowerCase().equals(" erkek"))
+                                                {
+                                                    siblingInfo = "Erkek kardeş: " + siblingInfoArray[0];
+                                                }
+                                                else if(siblingInfoArray[3].toLowerCase().equals(" kadın"))
+                                                {
+                                                    siblingInfo = "Kız kardeş: " + siblingInfoArray[0];
+                                                }
+                                                if(!(relationList.contains(siblingInfo)))
+                                                {
+                                                    relationList.add(siblingInfo);
+                                                    System.out.println(siblingInfo);
+                                                }
+                                            }
+                                        }
+                                    }
                                     if(!(parentNode.isRoot()))
                                     {
                                         String childInfo = null;
