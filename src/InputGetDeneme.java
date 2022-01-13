@@ -19,7 +19,8 @@ public class InputGetDeneme {
     public static ArrayList<Node> nodes = new ArrayList<Node>();
     public static ArrayList<Node> nodesTemp = new ArrayList<Node>();
     public static JTree tree;
-    public static HashMap<String, DefaultMutableTreeNode> listedRelations = new HashMap<String, DefaultMutableTreeNode>();
+    public static ArrayList<String> relationList = new ArrayList<String>();
+   // public static HashMap<String, DefaultMutableTreeNode> listedRelations = new HashMap<String, DefaultMutableTreeNode>();
    /* public static void methodWrite() throws IOException {
         String createPath = "C:";
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(createPath));
@@ -465,8 +466,46 @@ public class InputGetDeneme {
                             {
                                 if(!(var.getNode().isRoot()))
                                 {
-                                    //var.getNode().getParent().
+                                    String parentInfo = null;
+                                    String grandParentInfo = null;
+                                    DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) var.getNode().getParent();
+                                    String[] parentInfoArray = (parentNode.getUserObject()).toString().split("-");
+                                    if(parentInfoArray[3].toLowerCase().equals(" erkek"))
+                                    {
 
+                                        parentInfo = "Baba: " + parentInfoArray[0];
+                                    }
+                                    else if(parentInfoArray[3].toLowerCase().equals(" kadın"))
+                                    {
+                                        parentInfo = "Anne: " + parentInfoArray[0];
+                                    }
+                                    if(!(relationList.contains(parentInfo)))
+                                    {
+                                        relationList.add(parentInfo);
+                                    }
+                                    System.out.println(parentInfo);
+                                    if(!(parentNode.isRoot()))
+                                    {
+                                        DefaultMutableTreeNode grandParentNode = (DefaultMutableTreeNode)  parentNode.getParent();
+                                        String[] grandParentInfoArray = grandParentNode.getUserObject().toString().split("-");
+                                        if(grandParentInfoArray[3].toLowerCase().equals(" erkek"))
+                                        {
+                                            grandParentInfo = "Dede: " + parentInfoArray[0];
+                                        }
+                                        else if(grandParentInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" erkek"))
+                                        {
+                                            grandParentInfo = "Babaanne: " + parentInfoArray[0];
+                                        }
+                                        else if(grandParentInfoArray[3].toLowerCase().equals(" kadın") && parentInfoArray[3].toLowerCase().equals(" kadın"))
+                                        {
+                                            grandParentInfo = "Anneanne: " + parentInfoArray[0];
+                                        }
+                                        if(!(relationList.contains(grandParentInfo)))
+                                        {
+                                            relationList.add(grandParentInfo);
+                                        }
+                                        System.out.println(grandParentInfo);
+                                    }
                                 }
                                 else if(!(var.getNode().isLeaf()))
                                 {
