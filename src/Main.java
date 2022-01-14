@@ -27,16 +27,16 @@ public class Main {
         JFrame frame = new JFrame();
         JMenuBar menuBarHomePage = new JMenuBar();
         menuBarHomePage.setBounds(0,0,1200,30);
-        JMenu menuHomePage = new JMenu("Help");
+        JMenu menuHomePage = new JMenu("Yardım");
         menuBarHomePage.add(menuHomePage);
-        JMenuItem helpButton = new JMenuItem("Help");
+        JMenuItem helpButton = new JMenuItem("Yardım");
         menuHomePage.add(helpButton);
 
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URL("https://github.com/CemCeyln/302-Project").toURI());
+                    Desktop.getDesktop().browse(new URL("https://github.com/CemCeyln/302-Project/blob/master/Family%20Tree%20Creator%20Application%20Homepage.pdf").toURI());
                 } catch (IOException | URISyntaxException ioException) {
                     ioException.printStackTrace();
                 }
@@ -49,12 +49,12 @@ public class Main {
         frame.setVisible(true);
         frame.setLayout(null);
         frame.add(menuBarHomePage);
-        JLabel welcomeLabel = new JLabel("Welcome! Please click to button to begin :)");
-        welcomeLabel.setBounds(455,125,Integer.MAX_VALUE,20);
-        JButton createBtn = new JButton("Create Tree");
+        JLabel welcomeLabel = new JLabel("Hoşgeldiniz! Lütfen başlamak için butona tıklayınız :)");
+        welcomeLabel.setBounds(435,125,Integer.MAX_VALUE,20);
+        JButton createBtn = new JButton("Ağaç oluştur");
         createBtn.setBounds(500,160,150,150);
-        JLabel createdByLabel = new JLabel("Created by Cem Ceylan");
-        createdByLabel.setBounds(510,400, Integer.MAX_VALUE, 20);
+        JLabel createdByLabel = new JLabel("Cem Ceylan tarafından yaratılmıştır.");
+        createdByLabel.setBounds(480,400, Integer.MAX_VALUE, 20);
         frame.add(welcomeLabel);
         frame.add(createBtn);
         frame.add(createdByLabel);
@@ -88,7 +88,7 @@ public class Main {
                 //Sağ üst taraf
                 JLabel labelExp3 = new JLabel("Lütfen bu kısmı ağaca yeni bir eş eklerken kullanın");
                 labelExp3.setPreferredSize(new Dimension(15,15));
-                JLabel labelExp4 = new JLabel("Eğer ağaca ilk kişiyi ekliyorsanız Ebeveyn ID'yi 0 olarak kullanın.");
+                JLabel labelExp4 = new JLabel("Eğer ağaca ilk kişiyi ekliyorsanız Eş ID'yi 0 olarak kullanın.");
                 labelExp4.setPreferredSize(new Dimension(15,15));
                 JLabel labelSpouseID = new JLabel("Eş ID");
                 JTextField getSpouseID = new JTextField(15);
